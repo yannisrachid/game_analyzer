@@ -10,7 +10,7 @@ from mplsoccer.pitch import Pitch, VerticalPitch
 from matplotlib.colors import Normalize
 from matplotlib import cm
 from highlight_text import fig_text, ax_text
-from clubs import Ligue_1
+from clubs import clubs_list
 import warnings
 warnings.filterwarnings("ignore")
 

@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from passing_network import PassingNetwork
 from player_visualization import PlayerVisualization
-from clubs import Ligue_1
+from clubs import clubs_list
 
 st.markdown("<h3 style='text-align: left; color: black;'>For any contact or support:</h3>", unsafe_allow_html=True)
 
@@ -58,7 +58,7 @@ def find_clubs(ws_name, clubs_list):
 
 events_df["league"] = league.replace("_", " ")
 home_id = events_df.loc[0, "team_id"]
-clubs = find_clubs(events_df.loc[0, "game"], Ligue_1)
+clubs = find_clubs(events_df.loc[0, "game"], clubs_list)
 events_df["team_name"] = events_df["team_id"].apply(lambda x: clubs[0] if x == home_id else clubs[1])
 events_df["h_a"] = events_df["team_id"].apply(lambda x: 'h' if x == home_id else 'a')
 events_df["qualifiers"] = events_df["qualifiers"].apply(lambda x: eval(x))
