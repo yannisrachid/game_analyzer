@@ -66,11 +66,17 @@ events_df['cardType'] = events_df.apply(lambda row: check_card_type(row['qualifi
 events_df['xT_added'] = events_df.apply(calculate_expected_threat, axis=1)
 events_df = events_df.rename(columns={'start_x': 'x', 'start_y': 'y'})
 
-minutes = st.sidebar.slider('Select the game timelapse', 0, 90, (0, 90))
+max_minute = events_df["minute"].max()
+
+minutes = st.sidebar.slider('Select the game timelapse', 0, max_minute, (0, max_minute))
 
 passing_network = PassingNetwork(events_df, mins=minutes)
 
 st.pyplot(passing_network.plot_passing_network())
+
+club = st.sidebar.selectbox("Select a club", sorted([x for x in events_df["team_name"].unique() if isinstance(x, str)]))
+
+events_df = events_df[events_df["team_name"] == club].reset_index(drop=True)
 
 player = st.sidebar.selectbox("Select a player", sorted([x for x in events_df["player_name"].unique() if isinstance(x, str)]))
 

@@ -61,6 +61,7 @@ class PlayerVisualization():
                     arrowprops=dict(arrowstyle=f'->, head_length={self.head_length}, head_width={self.head_width}',
                                     color='#7c7c7c', lw=0.5))
         ax.annotate(xy=(104, 45), text='Play direction', ha='center', color='#7c7c7c', rotation=90, size=10)
+        ax.annotate(xy=(50, -5), text=f'Events from minutes {self.mins[0]} to {self.mins[1]}', ha='center', color='#7c7c7c', size=10)
         return fig, ax
 
     def plot_dribbles(self):
@@ -161,9 +162,20 @@ class PlayerVisualization():
         except KeyError:
             success_lt = 0
 
-        pct = int((success/total) * 100)
-        pct_forward = int((success_forward/forward_passes) * 100)
-        pct_lt = int((success_lt/last_third_passes) * 100)
+        if total != 0:
+            pct = int((success/total) * 100)
+        else:
+            pct = 0
+
+        if forward_passes != 0:
+            pct_forward = int((success_forward/forward_passes) * 100)
+        else:
+            pct_forward = 0
+
+        if last_third_passes != 0:
+            pct_lt = int((success_lt/last_third_passes) * 100)
+        else:
+            pct_lt = 0
 
         for index, row in df_passes.iterrows():
             start_z = row["x"]
@@ -176,6 +188,18 @@ class PlayerVisualization():
 
             pass_value = row["xT_added"]
 
+            key_pass = False
+            for qualifier in row["qualifiers"]:
+                if qualifier["type"]["displayName"] == "KeyPass":
+                    key_pass = True
+
+            if key_pass == True:
+                arrow_color = "orange"
+            elif row["outcome"] == True:
+                arrow_color = "green"
+            else:
+                arrow_color = "red"
+
             line_width = 0.5
             alpha = 1
 
@@ -185,7 +209,7 @@ class PlayerVisualization():
             shift_x = 2
             shift_y = shift_x*rel
 
-            slope = round(abs((end_y - start_y)*105/100 / (end_x - start_x)*68/100),1)
+            # slope = round(abs((end_y - start_y)*105/100 / (end_x - start_x)*68/100),1)
 
             head_length = 0.3
             head_width = 0.2
@@ -201,7 +225,7 @@ class PlayerVisualization():
                     # head_width=0.5)
             
             ax.annotate("", xy=(end_x, end_y), xytext=(start_x, start_y),
-                    arrowprops=dict(arrowstyle=f'->, head_length = {head_length}, head_width={head_width}', color="green" if row["outcome"] == True else "red", lw=0.5))
+                    arrowprops=dict(arrowstyle=f'->, head_length = {head_length}, head_width={head_width}', color=arrow_color, lw=0.5))
 
         font = 'serif'
         fig.text(x=0.6, y=1, s=f"Passes map for {self.player}", weight='bold', va="bottom", ha="center", fontsize=15, font=font)
@@ -226,10 +250,12 @@ class PlayerVisualization():
         style = ArrowStyle('->', head_length=5, head_width=3)
         green_arrow_patch = FancyArrowPatch((3400, 1570), (3400+100, 1570+100), arrowstyle=style, color='green')
         red_arrow_patch = FancyArrowPatch((3400, 1470), (3400+100, 1470+100), arrowstyle=style, color='red')
-        fig.patches.extend([green_arrow_patch, red_arrow_patch])
+        orange_arrow_patch = FancyArrowPatch((3400, 1370), (3400+100, 1370+100), arrowstyle=style, color='orange')
+        fig.patches.extend([green_arrow_patch, red_arrow_patch, orange_arrow_patch])
         fig.text(x=0.8, y=0.35, s=f"LEGEND", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
         fig.text(x=0.8, y=0.32, s="Successful Pass", va="bottom", ha="center", fontsize=12, font=font, color='black')
         fig.text(x=0.806, y=0.30, s="Unsuccessful Pass", va="bottom", ha="center", fontsize=12, font=font, color='black')
+        fig.text(x=0.784, y=0.28, s="Key Pass", va="bottom", ha="center", fontsize=12, font=font, color='black')
 
         plt.tight_layout()
 

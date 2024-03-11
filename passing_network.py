@@ -286,120 +286,126 @@ class PassingNetwork():
             
             # Step 3: plotting nodes
             for var, row in player_stats.iterrows():
-                player_x = position.loc[var]["x"]
-                player_y = position.loc[var]["y"]
+                try:
+                    player_x = position.loc[var]["x"]
+                    player_y = position.loc[var]["y"]
 
-                num_passes = row["num_passes"]
-                pass_value = row["pass_value"]
+                    num_passes = row["num_passes"]
+                    pass_value = row["pass_value"]
 
-                marker_size = self.change_range(num_passes, (min_player_count, max_player_count), (min_node_size, max_node_size))
+                    marker_size = self.change_range(num_passes, (min_player_count, max_player_count), (min_node_size, max_node_size))
 
-                norm = Normalize(vmin=min_player_value, vmax=max_player_value)
-        #         node_cmap = cm.get_cmap(nodes_cmap)
-                node_color = node_cmap(norm(pass_value)) 
-        #         print(node_color)
-        #         node_color = tuple([0.9 if n == 3 else i for n, i in enumerate(node_color)])
-                if var in players_in_first_eleven:
-                    marker_type = "."
-                else:
-                    marker_type = "^"
+                    norm = Normalize(vmin=min_player_value, vmax=max_player_value)
+            #         node_cmap = cm.get_cmap(nodes_cmap)
+                    node_color = node_cmap(norm(pass_value)) 
+            #         print(node_color)
+            #         node_color = tuple([0.9 if n == 3 else i for n, i in enumerate(node_color)])
+                    if var in players_in_first_eleven:
+                        marker_type = "."
+                    else:
+                        marker_type = "^"
 
-                ax[i].plot(player_x, player_y, marker_type, color=node_color, markersize=marker_size, zorder=5)
-                ax[i].plot(player_x, player_y, marker_type, markersize=marker_size+2, zorder=4, color='white')
+                    ax[i].plot(player_x, player_y, marker_type, color=node_color, markersize=marker_size, zorder=5)
+                    ax[i].plot(player_x, player_y, marker_type, markersize=marker_size+2, zorder=4, color='white')
 
-                var_ = ' '.join(var.split(' ')[1:]) if len(var.split(' ')) > 1 else var
+                    var_ = ' '.join(var.split(' ')[1:]) if len(var.split(' ')) > 1 else var
 
-                name_x = player_x
-                if marker_size > 30:
-                    delta_y = 5
-                elif marker_size > 20:
-                    delta_y = 3.5
-                elif marker_size > 10:
-                    delta_y = 2.5
-                else:
-                    delta_y = 1.5
-                name_y = player_y+delta_y if player_y > 48 else player_y - delta_y
+                    name_x = player_x
+                    if marker_size > 30:
+                        delta_y = 5
+                    elif marker_size > 20:
+                        delta_y = 3.5
+                    elif marker_size > 10:
+                        delta_y = 2.5
+                    else:
+                        delta_y = 1.5
+                    name_y = player_y+delta_y if player_y > 48 else player_y - delta_y
 
-                ax[i].annotate(var_, xy=(name_x, name_y), ha="center", va="center", zorder=7,
-                            fontsize=4, 
-        #                     color=tuple([min(i*1.5, 1) if n != 3 else 1 for n, i in enumerate(node_color)]), 
-                            color = 'black',
-                            font = 'serif',
-                            weight='heavy'
-                            )
+                    ax[i].annotate(var_, xy=(name_x, name_y), ha="center", va="center", zorder=7,
+                                fontsize=4, 
+            #                     color=tuple([min(i*1.5, 1) if n != 3 else 1 for n, i in enumerate(node_color)]), 
+                                color = 'black',
+                                font = 'serif',
+                                weight='heavy'
+                                )
 
-                player_stats.loc[var, 'marker_size'] = marker_size
+                    player_stats.loc[var, 'marker_size'] = marker_size
+                except KeyError:
+                    pass
                 
             # Step 4: ploting edges  
             for pair_key, row in pair_stats2.iterrows():
-                player1, player2 = pair_key.split("_")
+                try:
+                    player1, player2 = pair_key.split("_")
 
-                player1_x = position.loc[player1]["x"]
-                player1_y = position.loc[player1]["y"]
+                    player1_x = position.loc[player1]["x"]
+                    player1_y = position.loc[player1]["y"]
 
-                player2_x = position.loc[player2]["x"]
-                player2_y = position.loc[player2]["y"]
+                    player2_x = position.loc[player2]["x"]
+                    player2_y = position.loc[player2]["y"]
 
-                num_passes = row["num_passes"]
-                pass_value = row["pass_value"]
+                    num_passes = row["num_passes"]
+                    pass_value = row["pass_value"]
 
-                line_width = self.change_range(num_passes, (min_pair_count, max_pair_count), (min_edge_width, max_edge_width))
-                alpha = self.change_range(pass_value, (min_player_value, max_player_value), (0.4, 1))
+                    line_width = self.change_range(num_passes, (min_pair_count, max_pair_count), (min_edge_width, max_edge_width))
+                    alpha = self.change_range(pass_value, (min_player_value, max_player_value), (0.4, 1))
 
-                norm = Normalize(vmin=min_pair_value, vmax=max_pair_value)
-                edge_cmap = cm.get_cmap(nodes_cmap)
-                edge_color = edge_cmap(norm(pass_value))
+                    norm = Normalize(vmin=min_pair_value, vmax=max_pair_value)
+                    edge_cmap = cm.get_cmap(nodes_cmap)
+                    edge_color = edge_cmap(norm(pass_value))
 
-                x = player1_x
-                y = player1_y
-                dx = player2_x-player1_x
-                dy = player2_y-player1_y
-                rel = 68/105
-                shift_x = 2
-                shift_y = shift_x*rel
+                    x = player1_x
+                    y = player1_y
+                    dx = player2_x-player1_x
+                    dy = player2_y-player1_y
+                    rel = 68/105
+                    shift_x = 2
+                    shift_y = shift_x*rel
 
-                slope = round(abs((player2_y - player1_y)*105/100 / (player2_x - player1_x)*68/100),1)
+                    slope = round(abs((player2_y - player1_y)*105/100 / (player2_x - player1_x)*68/100),1)
 
-                mutation_scale = 1
-                if (slope > 0.5):
-                    if dy > 0:
-                        ax[i].annotate("", xy=(x+dx+shift_x, y+dy), xytext=(x+shift_x, y),zorder=2,
-                                arrowprops=dict(arrowstyle=f'->, head_length = {head_length}, head_width={head_width}',
-                                                color=tuple([alpha if n == 3 else i for n, i in enumerate(edge_color)]),
-                                                fc = 'blue',
-                                                lw=line_width,
-                                                shrinkB=player_stats.loc[player2, 'marker_size']/5))
-                        
-                        
-                    elif dy <= 0:
-                        ax[i].annotate("", xy=(x+dx-shift_x, y+dy), xytext=(x-shift_x, y),zorder=2,
-                                arrowprops=dict(arrowstyle=f'->, head_length = {head_length}, head_width={head_width}',
-                                                color=tuple([alpha if n == 3 else i for n, i in enumerate(edge_color)]),
-                                                fc = 'blue',
-                                                lw=line_width,
-                                                shrinkB=player_stats.loc[player2, 'marker_size']/5))
-                        
-                elif (slope <= 0.5) & (slope >=0):
-                    if dx > 0:
-        #                 print(2)
+                    mutation_scale = 1
+                    if (slope > 0.5):
+                        if dy > 0:
+                            ax[i].annotate("", xy=(x+dx+shift_x, y+dy), xytext=(x+shift_x, y),zorder=2,
+                                    arrowprops=dict(arrowstyle=f'->, head_length = {head_length}, head_width={head_width}',
+                                                    color=tuple([alpha if n == 3 else i for n, i in enumerate(edge_color)]),
+                                                    fc = 'blue',
+                                                    lw=line_width,
+                                                    shrinkB=player_stats.loc[player2, 'marker_size']/5))
+                            
+                            
+                        elif dy <= 0:
+                            ax[i].annotate("", xy=(x+dx-shift_x, y+dy), xytext=(x-shift_x, y),zorder=2,
+                                    arrowprops=dict(arrowstyle=f'->, head_length = {head_length}, head_width={head_width}',
+                                                    color=tuple([alpha if n == 3 else i for n, i in enumerate(edge_color)]),
+                                                    fc = 'blue',
+                                                    lw=line_width,
+                                                    shrinkB=player_stats.loc[player2, 'marker_size']/5))
+                            
+                    elif (slope <= 0.5) & (slope >=0):
+                        if dx > 0:
+            #                 print(2)
 
-                        ax[i].annotate( "", xy=(x+dx, y+dy-shift_y), xytext=(x, y-shift_y),zorder=2,
-                                arrowprops=dict(arrowstyle=f'->, head_length = {head_length}, head_width={head_width}',
-                                                color=tuple([alpha if n == 3 else i for n, i in enumerate(edge_color)]),
-                                                fc = 'blue',
-                                                lw=line_width,
-                                                shrinkB=player_stats.loc[player2, 'marker_size']/5))
+                            ax[i].annotate( "", xy=(x+dx, y+dy-shift_y), xytext=(x, y-shift_y),zorder=2,
+                                    arrowprops=dict(arrowstyle=f'->, head_length = {head_length}, head_width={head_width}',
+                                                    color=tuple([alpha if n == 3 else i for n, i in enumerate(edge_color)]),
+                                                    fc = 'blue',
+                                                    lw=line_width,
+                                                    shrinkB=player_stats.loc[player2, 'marker_size']/5))
 
-                    elif dx <= 0:
+                        elif dx <= 0:
 
-                        ax[i].annotate("", xy=(x+dx, y+dy+shift_y), xytext=(x, y+shift_y),zorder=2,
-                                arrowprops=dict(arrowstyle=f'->, head_length = {head_length}, head_width={head_width}',
-                                                color=tuple([alpha if n == 3 else i for n, i in enumerate(edge_color)]),
-                                                fc = 'blue',
-                                                lw=line_width,
-                                                shrinkB=player_stats.loc[player2, 'marker_size']/5))
-                else:
-                    print(1)
+                            ax[i].annotate("", xy=(x+dx, y+dy+shift_y), xytext=(x, y+shift_y),zorder=2,
+                                    arrowprops=dict(arrowstyle=f'->, head_length = {head_length}, head_width={head_width}',
+                                                    color=tuple([alpha if n == 3 else i for n, i in enumerate(edge_color)]),
+                                                    fc = 'blue',
+                                                    lw=line_width,
+                                                    shrinkB=player_stats.loc[player2, 'marker_size']/5))
+                    else:
+                        print(1)
+                except KeyError:
+                    pass
                     
             self.add_legend(fig, i)
 
