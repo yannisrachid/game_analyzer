@@ -27,7 +27,7 @@ st.sidebar.text("Data last updated on 2024-03-22")
 
 st.sidebar.markdown("<h2 style='text-align: center; color: white;'>Team performance</h2>", unsafe_allow_html=True)
 
-league = st.sidebar.selectbox('Select a league', ["Bundesliga", "EPL", "La Liga", "Ligue 1", "Serie A"])
+league = st.sidebar.selectbox('Select a league', ["Bundesliga", "Eredivisie", "EPL", "Jupiler Pro League", "La Liga", "Liga Nos", "Ligue 1", "Serie A"])
 
 @st.cache_data
 def load_dataframe(league):
