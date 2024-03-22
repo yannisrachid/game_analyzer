@@ -41,7 +41,8 @@ class PassingNetwork():
         PassingNetwork.league = self.events_df.loc[0, "league"]
         PassingNetwork.score = self.events_df.loc[0, "score"].replace(":", "-")
         PassingNetwork.date = self.events_df.loc[0, "date"].split("T")[0]
-        PassingNetwork.home_club, PassingNetwork.away_club = list(self.events_df['team_name'].unique())
+        PassingNetwork.home_club = self.events_df[self.events_df["h_a"] == "h"]["team_name"].values[0]
+        PassingNetwork.away_club = self.events_df[self.events_df["h_a"] == "a"]["team_name"].values[0]
 
         for teamId in teamIds:
             
@@ -456,19 +457,20 @@ class PassingNetwork():
         fig.text(x=0.5, y=.92, s=f"Passing network for {PassingNetwork.home_club} {PassingNetwork.score} {PassingNetwork.away_club}", weight='bold', va="bottom", ha="center", fontsize=10, font=font)
         fig.text(x=0.26, y=.875, s=PassingNetwork.home_club, weight='bold', va="bottom", ha="center", fontsize=8, font=font)
         fig.text(x=0.745, y=.875, s=PassingNetwork.away_club, weight='bold', va="bottom", ha="center", fontsize=8, font=font)
-        fig.text(x=0.5, y=0.90, s=f"{PassingNetwork.league}| Season 2023-2024 | {PassingNetwork.date}", va="bottom", ha="center", fontsize=6, font=font)
+        fig.text(x=0.5, y=0.90, s=f"{PassingNetwork.league} | Season 2023-2024 | {PassingNetwork.date}", va="bottom", ha="center", fontsize=6, font=font)
         fig.text(x=0.87, y=-0.0, s="Yannis R", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
         fig.text(x=0.14, y=.14, s="Pass count between", va="bottom", ha="center", fontsize=6, font=font)
-        fig.text(x=0.38, y=.14, s="Pass value between (OP xT)", va="bottom", ha="center", fontsize=6, font=font)
+        fig.text(x=0.38, y=.14, s="Pass value between (xT)", va="bottom", ha="center", fontsize=6, font=font)
         fig.text(x=0.61, y=.14, s="Player pass count", va="bottom", ha="center", fontsize=6, font=font)
-        fig.text(x=0.84, y=.14, s="Player pass value (OP xT)", va="bottom", ha="center", fontsize=6, font=font)
+        fig.text(x=0.84, y=.14, s="Player pass value (xT)", va="bottom", ha="center", fontsize=6, font=font)
         fig.text(x=0.41, y=.038, s="Low", va="bottom", ha="center", fontsize=6, font=font)
         fig.text(x=0.6, y=.038, s="High", va="bottom", ha="center", fontsize=6, font=font)
         fig.text(x=0.1, y=-0.0, s="linkedin.com/in/yannis-rachid-230/", va="bottom", ha="center", weight='bold', fontsize=6, font=font, color='black')
-        fig.text(x=0.13, y=0.07, s="5 to 16+", va="bottom", ha="center", fontsize=5, font=font, color='black')
-        fig.text(x=0.37, y=0.07, s="0 to 0.09+", va="bottom", ha="center", fontsize=5, font=font, color='black')
-        fig.text(x=0.61, y=0.07, s="1 to 88+", va="bottom", ha="center", fontsize=5, font=font, color='black')
-        fig.text(x=0.84, y=0.07, s="0.01 to 0.36+", va="bottom", ha="center", fontsize=5, font=font, color='black')
+        fig.text(x=0.04, y=0.02, s="Template: FOOTSCI", va="bottom", ha="center", weight='bold', fontsize=6, font=font, color='black')
+        fig.text(x=0.13, y=0.07, s=f"5 to {int(PassingNetwork.max_pair_count)}", va="bottom", ha="center", fontsize=5, font=font, color='black')
+        fig.text(x=0.37, y=0.07, s=f"0 to {round(PassingNetwork.max_pair_value, 2)}", va="bottom", ha="center", fontsize=5, font=font, color='black')
+        fig.text(x=0.61, y=0.07, s=f"1 to {PassingNetwork.max_player_count}", va="bottom", ha="center", fontsize=5, font=font, color='black')
+        fig.text(x=0.84, y=0.07, s=f"0.01 to {round(PassingNetwork.max_player_value, 2)}", va="bottom", ha="center", fontsize=5, font=font, color='black')
 
         head_length = 20
         head_width = 20

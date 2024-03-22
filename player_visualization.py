@@ -9,14 +9,16 @@ from matplotlib.colors import Normalize
 from matplotlib import cm
 from highlight_text import fig_text, ax_text
 from clubs import clubs_list
+import seaborn as sns
 import warnings
 warnings.filterwarnings("ignore")
 
 class PlayerVisualization():
-    def __init__(self, events_df, player, mins):
+    def __init__(self, events_df, player, mins, club):
         self.events_df = events_df
         self.player = player
         self.mins = mins
+        self.club = club
         self.ax = None
         self.head_length = 0.3
         self.head_width = 0.1
@@ -30,9 +32,12 @@ class PlayerVisualization():
         else:
             return new_value
         
-    def prepare_data(self, events_df, player, mins):
+    def prepare_data_game(self, events_df, player, mins):
         df = events_df[(events_df['minute'] >= mins[0]) & (events_df['minute'] <= mins[1])].reset_index(drop=True)
         df_player = df[df["player_name"] == player].reset_index(drop=True)
+        PlayerVisualization.league = events_df.loc[0, "league"]
+        PlayerVisualization.score = events_df.loc[0, "score"].replace(":", "-")
+        PlayerVisualization.date = events_df.loc[0, "date"].split("T")[0]
         return df_player
     
     def draw_pitch(self):
@@ -66,7 +71,7 @@ class PlayerVisualization():
 
     def plot_dribbles(self):
         # Prepare data and pitch
-        df = self.prepare_data(self.events_df, self.player, self.mins)
+        df = self.prepare_data_game(self.events_df, self.player, self.mins)
         fig, ax = self.draw_pitch()
 
         # Get dribbles
@@ -116,8 +121,8 @@ class PlayerVisualization():
 
         
         font = 'serif'
-        fig.text(x=0.6, y=1, s=f"Dribbles map for {self.player}", weight='bold', va="bottom", ha="center", fontsize=15, font=font)
-        fig.text(x=0.87, y=-0.0, s="Yannis R", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
+        fig.text(x=0.6, y=1, s=f"{self.player} | Dribble map | {self.club}", weight='bold', va="bottom", ha="center", fontsize=18, font=font)
+        fig.text(x=0.6, y=0.982, s=f"{PlayerVisualization.league} | Season 2023-2024 | {PlayerVisualization.date}", va="bottom", ha="center", fontsize=12, font=font)
         fig.text(x=0.37, y=-0.0, s="linkedin.com/in/yannis-rachid-230/", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
 
         fig.text(x=0.8, y=0.8, s="GLOBAL", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
@@ -137,8 +142,8 @@ class PlayerVisualization():
         
         return fig
     
-    def plot_passes(self):
-        df = self.prepare_data(self.events_df, self.player, self.mins)
+    def plot_passes_game(self):
+        df = self.prepare_data_game(self.events_df, self.player, self.mins)
         fig, ax = self.draw_pitch()
 
         df_passes = df[df["type_name"] == "Pass"]
@@ -228,7 +233,8 @@ class PlayerVisualization():
                     arrowprops=dict(arrowstyle=f'->, head_length = {head_length}, head_width={head_width}', color=arrow_color, lw=0.5))
 
         font = 'serif'
-        fig.text(x=0.6, y=1, s=f"Passes map for {self.player}", weight='bold', va="bottom", ha="center", fontsize=15, font=font)
+        fig.text(x=0.6, y=1, s=f"{self.player} | Passmap | {self.club}", weight='bold', va="bottom", ha="center", fontsize=20, font=font)
+        fig.text(x=0.6, y=0.982, s=f"{PlayerVisualization.league} | Season 2023-2024 | {PlayerVisualization.date}", va="bottom", ha="center", fontsize=12, font=font)
         fig.text(x=0.87, y=-0.0, s="Yannis R", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
         fig.text(x=0.37, y=-0.0, s="linkedin.com/in/yannis-rachid-230/", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
 
@@ -258,5 +264,151 @@ class PlayerVisualization():
         fig.text(x=0.784, y=0.28, s="Key Pass", va="bottom", ha="center", fontsize=12, font=font, color='black')
 
         plt.tight_layout()
+
+        return fig
+    
+
+    def plot_heatmap_game(self):
+
+        df = self.prepare_data_game(self.events_df, self.player, self.mins)
+        fig, ax = self.draw_pitch()
+
+        events_location_list = [[row["y"], row["x"]] for index, row in df.iterrows() if not pd.isnull(row["y"]) and not pd.isnull(row["x"])]
+        events_location = np.array(events_location_list)
+
+        x = events_location[:,0]
+        y = events_location[:,1]
+
+        # plot the heatmap
+        #customcmap = mpl.colors.LinearSegmentedColormap.from_list("custom cmap", ['yellow', 'red'])
+        cmap = plt.get_cmap("hot").reversed()
+        ax = sns.kdeplot(x=x, y=y, shade=True, cmap=cmap, bw=0.1, n_levels=200)
+
+        font = 'serif'
+        fig.text(x=0.5, y=1, s=f"{self.player} | Heatmap | {self.club}", weight='bold', va="bottom", ha="center", fontsize=12, font=font)
+        fig.text(x=0.5, y=0.982, s=f"{PlayerVisualization.league} | Season 2023-2024 | {PlayerVisualization.date}", va="bottom", ha="center", fontsize=10, font=font)
+        fig.text(x=0.7, y=-0.0, s="Yannis R", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
+        fig.text(x=0.37, y=-0.0, s="linkedin.com/in/yannis-rachid-230/", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
+
+        plt.tight_layout()
+
+        return fig
+    
+    def get_shot_data(self, dictionnary_list):
+        if type(dictionnary_list) == "str":
+            dictionnary_list = eval(dictionnary_list)
+        # Initialisation des variables
+        type_shot = None
+        goal_mouth_z = None
+        goal_mouth_y = None
+
+        # Parcours de chaque dictionnaire dans la liste
+        for item in dictionnary_list:
+            # Récupération du type d'événement
+            if 'type' in item.keys() and 'displayName' in item['type'].keys():
+                event_type = item['type']['displayName']
+                if event_type in ['RightFoot', 'LeftFoot', 'Head']:
+                    type_shot = event_type
+            
+            # Récupération de la valeur de GoalMouthZ
+            if 'type' in item.keys() and 'displayName' in item['type'].keys():
+                if item['type']['displayName'] == 'GoalMouthZ' and 'value' in item:
+                    goal_mouth_z = float(item['value'])
+            
+            # Récupération de la valeur de GoalMouthY
+            if 'type' in item.keys() and 'displayName' in item['type'].keys():
+                if item['type']['displayName'] == 'GoalMouthY' and 'value' in item:
+                    goal_mouth_y = float(item['value'])
+        
+        return {"type": type_shot, "goal_mouth_z": goal_mouth_z, "goal_mouth_y": goal_mouth_y}
+    
+    def plot_shotmap_player(self):
+        
+        df = self.prepare_data_game(self.events_df, self.player, self.mins)
+        df["shot_data"] = df["qualifiers"].apply(self.get_shot_data)
+        plt.style.use('fivethirtyeight')
+        used_labels = []
+
+        pitch = VerticalPitch(pitch_type='opta', 
+                                line_color='#7c7c7c',
+                                goal_type='box',
+                                linewidth=0.5,
+                                pad_bottom=-10,
+                                half=True)
+
+        fig, axs = pitch.grid(figheight=8, endnote_height=0,  # no endnote
+                            title_height=0.1, title_space=0.02,
+                            # Turn off the endnote/title axis. I usually do this after
+                            # I am happy with the chart layout and text placement
+                            axis=False,
+                            grid_height=0.83)
+
+        #pitch.draw(ax=ax, constrained_layout=False, tight_layout=False)
+
+        df_shots = df[df["shot"] == True].reset_index()
+
+        for index, row in df_shots.iterrows():
+            marker_color = "black" if row["goal"] == True else "#ADADAD"
+            type_shot = row["shot_data"]["type"]
+            if row["goal"] == True:
+                label = f"Goal: {type_shot}"
+                edge_color = "green" if row["shot_data"]["type"] == "RightFoot" else ("red" if row["shot_data"]["type"] == "LeftFoot" else "blue")
+            else:
+                label = "Attempted"
+                edge_color = None
+
+            if label not in used_labels:
+                pitch.scatter(row["x"], row["y"], s=200, c=marker_color, edgecolors=edge_color, label=label, ax=axs["pitch"], linewidths=1)
+                used_labels.append(label)
+            else:
+                pitch.scatter(row["x"], row["y"], s=200, c=marker_color, edgecolors=edge_color, ax=axs["pitch"], linewidths=1)
+            #if label == "Goal":
+            #    shot_data = row["shot_data"]
+            #    pitch.lines(row["x"], row["y"], row["shot_data"]["goal_mouth_z"], row["shot_data"]["goal_mouth_y"], comet=True, label=row["shot_data"]["type"], color='#cb5a4c', ax=axs['pitch'])
+
+        legend = axs['pitch'].legend(loc='center left', labelspacing=0.5)
+
+        font = "serif"
+        axs['title'].text(0.5, 0.5, s=f"{self.player} | Shot map | {self.club}", weight='bold', va="bottom", ha="center", fontsize=18, font=font)
+        axs['title'].text(0.5, 0.1, s=f"{PlayerVisualization.league} | Season 2023-2024 | {PlayerVisualization.date}", va="bottom", ha="center", fontsize=12, font=font)
+
+        return fig
+    
+    def plot_game_player_defensive(self):
+
+        df = self.prepare_data_game(self.events_df, self.player, self.mins)
+        fig, ax = self.draw_pitch()
+
+        df_def = df[df["type_name"].isin(["Tackle", "Interception", "BlockedPass", "Clearance", "Aerial"])]
+        df_def = df_def[df_def["outcome"] == True].reset_index()
+
+        color_dict = {
+            "Tackle": "yellow",
+            "Interception": "orange", 
+            "BlockedPass": "red", 
+            "Clearance": "green", 
+            "Aerial": "blue"
+        }
+
+        used_labels = []
+
+        for index, row in df_def.iterrows():
+            marker_color = color_dict[row["type_name"]]
+
+            label = row["type_name"]
+
+            if label not in used_labels:
+                ax.scatter(row["x"], row["y"], s=200, c=marker_color, label=label, linewidths=1)
+                used_labels.append(label)
+            else:
+                ax.scatter(row["x"], row["y"], s=200, c=marker_color, linewidths=1)
+
+        legend = ax.legend(loc='best', labelspacing=0.5)
+
+        font = 'serif'
+        fig.text(x=0.5, y=0.9, s=f"{self.player} | Defensive map | {self.club}", weight='bold', va="bottom", ha="center", fontsize=12, font=font)
+        fig.text(x=0.5, y=0.885, s=f"{PlayerVisualization.league} | Season 2023-2024 | {PlayerVisualization.date}", va="bottom", ha="center", fontsize=10, font=font)
+        fig.text(x=0.7, y=-0.0, s="Yannis R", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
+        fig.text(x=0.37, y=-0.0, s="linkedin.com/in/yannis-rachid-230/", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
 
         return fig
