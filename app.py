@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from passing_network import PassingNetwork
 from player_visualization import PlayerVisualization
+from positional_map import PositionalMap
 from clubs import clubs_list, clubs_ids
 
 st.markdown("<h3 style='text-align: center; color: black;'>For any contact or support:</h3>", unsafe_allow_html=True)
@@ -95,6 +96,8 @@ st.markdown("<h2 style='text-align: center; color: black;'>Team performance</h2>
 passing_network = PassingNetwork(events_df, mins=minutes)
 st.pyplot(passing_network.plot_passing_network())
 
+positional_map = PositionalMap(events_df=events_df , mins= minutes)
+st.pyplot(positional_map.plot_positional_map())
 
 st.sidebar.markdown("<h2 style='text-align: center; color: white;'>Player performance</h2>", unsafe_allow_html=True)
 

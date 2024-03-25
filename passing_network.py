@@ -11,6 +11,9 @@ from matplotlib.colors import Normalize
 from matplotlib import cm
 from highlight_text import fig_text, ax_text
 from clubs import clubs_list
+import os
+from fuzzywuzzy import process
+from PIL import Image
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -41,8 +44,8 @@ class PassingNetwork():
         PassingNetwork.league = self.events_df.loc[0, "league"]
         PassingNetwork.score = self.events_df.loc[0, "score"].replace(":", "-")
         PassingNetwork.date = self.events_df.loc[0, "date"].split("T")[0]
-        PassingNetwork.home_club = self.events_df[self.events_df["h_a"] == "h"]["team_name"].values[0]
-        PassingNetwork.away_club = self.events_df[self.events_df["h_a"] == "a"]["team_name"].values[0]
+        PassingNetwork.home_club = self.events_df[self.events_df["h_a"] == "h"]["team_name"].values[0].replace("-", " ")
+        PassingNetwork.away_club = self.events_df[self.events_df["h_a"] == "a"]["team_name"].values[0].replace("-", " ")
 
         for teamId in teamIds:
             
@@ -537,5 +540,42 @@ class PassingNetwork():
 
         fig.patches.extend([arrow9])
 
+        home_logo_path = self.get_path_logo(PassingNetwork.league, PassingNetwork.home_club)
+        home_img = Image.open(home_logo_path)
+
+        away_logo_path = self.get_path_logo(PassingNetwork.league, PassingNetwork.away_club)
+        away_img = Image.open(away_logo_path)
+
+        pc = 0.35
+        home_img_redim = home_img.resize((int(home_img.width * pc), int(home_img.height * pc)))
+        away_img_redim = away_img.resize((int(away_img.width * pc), int(away_img.height * pc)))
+
+        fig.figimage(home_img_redim, xo=160, yo=1060, zorder=2)
+        fig.figimage(away_img_redim, xo=1130, yo=1060, zorder=2)
+
         plt.tight_layout()
         plt.subplots_adjust(wspace=0.1, hspace=0, bottom=0.1)
+
+    def get_path_logo(self, league, club):
+
+        dict_logo = {'EPL':'GB1',
+                    'Serie A':'IT1',
+                    'La Liga':'ES1',
+                    'Bundesliga':'L1',
+                    'Ligue 1':'FR1',
+                    'Eredivisie': 'NL1',
+                    'Liga Nos': 'PO1',
+                    'Jupiler Pro League': 'BE1'}
+        
+        club = club.replace('-', ' ')
+
+        path_to_league_logo = f"logos/{dict_logo[league]}"
+        choices = os.listdir(path_to_league_logo)
+        logo_name_matched = process.extractOne(club, choices, score_cutoff=80)
+        
+        if logo_name_matched != None:
+            logo_name_matched = logo_name_matched[0]
+            path_return = os.path.join(path_to_league_logo, logo_name_matched)
+            return path_return
+        else:
+            return "img/logo_tr.png"
