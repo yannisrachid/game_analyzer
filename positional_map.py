@@ -1,16 +1,8 @@
 import pandas as pd
 import os
-import json
-import numpy as np
-from scipy.stats import binned_statistic_2d
 import matplotlib as mpl
 from matplotlib import pyplot as plt
-from matplotlib.patches import RegularPolygon, Arrow, ArrowStyle,FancyArrowPatch, Circle,FancyArrow
-from mplsoccer.pitch import Pitch, VerticalPitch
-from matplotlib.colors import Normalize
-from matplotlib import cm
-from highlight_text import fig_text, ax_text
-from clubs import clubs_list
+from mplsoccer.pitch import VerticalPitch
 import os
 from fuzzywuzzy import process
 from PIL import Image
@@ -18,13 +10,21 @@ import warnings
 warnings.filterwarnings("ignore")
 
 class PositionalMap:
+    """
+    Display the positional map of both teams with all the necessary details (game, score, visualisations, logos...).
+    """
     def __init__(self, events_df, mins):
         self.events_df = events_df
         self.mins = mins
         self.ax = None
 
     def plot_positional_map(self):
-        """"""
+        """
+        Plot the positional map for the both teams.
+
+        Returns:
+        - matplotlib.Fig: The positional map.
+        """
         mins = self.mins
         events_df = self.events_df
         PositionalMap.league = events_df.loc[0, "league"]
@@ -73,6 +73,13 @@ class PositionalMap:
         return fig
             
     def add_legend(self, fig, i):
+        """
+        Add the legend for each ax (each passing network team) in the fig.
+
+        Parameters:
+        - fig (matplotlib.Fig): the matplotlib figure
+        - i (int): the index for each ax of the figure.
+        """
         ax = self.ax[i]
 
         # Adding annotations
@@ -108,7 +115,16 @@ class PositionalMap:
         plt.subplots_adjust(wspace=0.1, hspace=0, bottom=0.1)
 
     def get_path_logo(self, league, club):
+        """
+        Get the path logo for a selected team.
 
+        Parameters:
+        - league (string): The league club.
+        - club (string): The selected club.
+
+        Returns:
+        - string: The path of the png logo.
+        """
         dict_logo = {'EPL':'GB1',
                     'Serie A':'IT1',
                     'La Liga':'ES1',

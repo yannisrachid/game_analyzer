@@ -1,0 +1,7 @@
+csv_data/
+archive/
+json_data/
+test_dataviz.ipynb
+test_new_viz.ipynb
+__pycache__/
+.streamlit/secrets.toml

@@ -1,15 +1,9 @@
 import pandas as pd
 import numpy as np
-from scipy.stats import binned_statistic_2d
 import matplotlib as mpl
 from matplotlib import pyplot as plt
-from matplotlib.patches import RegularPolygon, Arrow, ArrowStyle,FancyArrowPatch, Circle,FancyArrow
-from matplotlib.offsetbox import OffsetImage, AnnotationBbox
-from mplsoccer.pitch import Pitch, VerticalPitch
-from matplotlib.colors import Normalize
-from matplotlib import cm
-from highlight_text import fig_text, ax_text
-from clubs import clubs_list
+from matplotlib.patches import ArrowStyle,FancyArrowPatch
+from mplsoccer.pitch import VerticalPitch
 import seaborn as sns
 import os
 from fuzzywuzzy import process
@@ -18,6 +12,9 @@ import warnings
 warnings.filterwarnings("ignore")
 
 class PlayerVisualization():
+    """
+    Display all the player visualisations with all the necessary details (game, score, visualisations, logos...).
+    """
     def __init__(self, events_df, player, mins, club):
         self.events_df = events_df
         self.player = player
@@ -28,6 +25,17 @@ class PlayerVisualization():
         self.head_width = 0.1
 
     def change_range(self, value, old_range, new_range):
+        """
+        Changes the value relative to all the values in the Series.
+
+        Parameters:
+        - value (int): Current value to change
+        - old_range (tuple): Current range of values (min_value, max_value) for the Series.
+        - new_range (tuple): New range of values (min_node_size, max_node_size).
+
+        Returns:
+        - int: New value in the new range.
+        """
         new_value = ((value-old_range[0]) / (old_range[1]-old_range[0])) * (new_range[1]-new_range[0]) + new_range[0]
         if new_value >= new_range[1]:
             return new_range[1]
@@ -36,7 +44,18 @@ class PlayerVisualization():
         else:
             return new_value
         
-    def prepare_data_game(self, events_df, player, mins):
+    def preprocessing(self, events_df, player, mins):
+        """
+        Performs all data pre-processing based on information entered by the user.
+
+        Parameters:
+        - events_df (pd.DataFrame): All the events of the game.
+        - player (string): The player selected by the user.
+        - mins (tuple): The game timelapse selected by the user.
+
+        Returns:
+        - pd.DataFrame: Preprocesses the events DataFrame with the user choices and instantiates necessary bodies info.
+        """
         df = events_df[(events_df['minute'] >= mins[0]) & (events_df['minute'] <= mins[1])].reset_index(drop=True)
         df_player = df[df["player_name"] == player].reset_index(drop=True)
         PlayerVisualization.league = events_df.loc[0, "league"]
@@ -45,6 +64,14 @@ class PlayerVisualization():
         return df_player
     
     def draw_pitch(self):
+        """
+        Draw a Vertical Pitch with the Opta type.
+
+        Returns:
+        - matplotlib.Fig: The matplotlib figure.
+        - matplotlib.ax: The matplotlib ax.
+        - pitch: The vertical pitch.
+        """
         plt.style.use('fivethirtyeight')
         fig, ax = plt.subplots(figsize=[18,12], dpi=400)
         self.ax = ax
@@ -74,8 +101,14 @@ class PlayerVisualization():
         return fig, ax, pitch
 
     def plot_dribbles(self):
+        """
+        Plot the player dribble map.
+
+        Returns:
+        - matplotlib.Fig: The matplotlib figure with all the dribbles.
+        """
         # Prepare data and pitch
-        df = self.prepare_data_game(self.events_df, self.player, self.mins)
+        df = self.preprocessing(self.events_df, self.player, self.mins)
         fig, ax, pitch = self.draw_pitch()
 
         # Get dribbles
@@ -152,7 +185,13 @@ class PlayerVisualization():
         return fig
     
     def plot_passes_game(self):
-        df = self.prepare_data_game(self.events_df, self.player, self.mins)
+        """
+        Plot the player pass map.
+
+        Returns:
+        - matplotlib.Fig: The matplotlib figure with all the passes.
+        """
+        df = self.preprocessing(self.events_df, self.player, self.mins)
         fig, ax, pitch = self.draw_pitch()
 
         df_passes = df[df["type_name"] == "Pass"]
@@ -223,26 +262,8 @@ class PlayerVisualization():
             shift_x = 2
             shift_y = shift_x*rel
 
-            # slope = round(abs((end_y - start_y)*105/100 / (end_x - start_x)*68/100),1)
-
-            head_length = 0.3
-            head_width = 0.2
-
-            # ax.arrow(x=start_x,
-             #        y=start_y,
-              #       dx=dx,
-               #      dy=dy,
-                #     color="green" if row["outcome"] == True else "red",
-                 #    width=0.3,
-                  #   alpha=pass_value+0.5,
-                   #  length_includes_head=True,
-                    # head_width=0.5)
-            
-            # ax.annotate("", xy=(end_x, end_y), xytext=(start_x, start_y), arrowprops=dict(arrowstyle=f'->, head_length = {head_length}, head_width={head_width}', color=arrow_color, lw=0.5))
-
             # pitch.lines(row["x"], row["y"], row["end_x"], row["end_y"], color=arrow_color, ax=ax, lw=3, transparent=True)
             pitch.lines(row["x"], row["y"], row["end_x"], row["end_y"], color=arrow_color, ax=ax, lw=4, comet=True, transparent=True)
-            # pitch.scatter(row["end_x"], row["end_y"], color=arrow_color, ax=ax, s=2)
             # pitch.scatter(row["end_x"], row["end_y"], s=50, c="white", edgecolors=arrow_color, ax=ax, lw=2, zorder=2)
             pitch.scatter(row["end_x"], row["end_y"], s=20, c=arrow_color, edgecolors=arrow_color, ax=ax, lw=2, zorder=2)
 
@@ -277,22 +298,22 @@ class PlayerVisualization():
         fig.text(x=0.806, y=0.30, s="Unsuccessful Pass", va="bottom", ha="center", fontsize=12, font=font, color='black')
         fig.text(x=0.784, y=0.28, s="Key Pass", va="bottom", ha="center", fontsize=12, font=font, color='black')
 
-        # self.add_image(ax=ax, img_path=self.get_path_logo(self.league, self.club), xy=(100, 50), zoom=0.5)
-        # add_image(self, ax, img_path, xy, zoom)
-
-        # fig_logo = plt.figure()
         logo_path = self.get_path_logo(self.league, self.club)  # Chemin d'accès à l'image du logo
         img = plt.imread(logo_path)
         fig.figimage(img, xo=1830, yo=2100, zorder=2)
-
         plt.tight_layout()
 
         return fig
     
 
     def plot_heatmap_game(self):
+        """
+        Plot the player heat map.
 
-        df = self.prepare_data_game(self.events_df, self.player, self.mins)
+        Returns:
+        - matplotlib.Fig: The matplotlib figure with all the events.
+        """
+        df = self.preprocessing(self.events_df, self.player, self.mins)
         fig, ax, pitch = self.draw_pitch()
 
         events_location_list = [[row["y"], row["x"]] for index, row in df.iterrows() if not pd.isnull(row["y"]) and not pd.isnull(row["x"])]
@@ -302,7 +323,6 @@ class PlayerVisualization():
         y = events_location[:,1]
 
         # plot the heatmap
-        #customcmap = mpl.colors.LinearSegmentedColormap.from_list("custom cmap", ['yellow', 'red'])
         cmap = plt.get_cmap("hot").reversed()
         ax = sns.kdeplot(x=x, y=y, shade=True, cmap=cmap, bw=0.1, n_levels=200)
 
@@ -312,7 +332,6 @@ class PlayerVisualization():
         fig.text(x=0.7, y=-0.0, s="Yannis R", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
         fig.text(x=0.37, y=-0.0, s="linkedin.com/in/yannis-rachid-230/", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
 
-        # fig_logo = plt.figure()
         logo_path = self.get_path_logo(self.league, self.club)
         img = Image.open(logo_path)
         pc = 0.75
@@ -324,27 +343,36 @@ class PlayerVisualization():
         return fig
     
     def get_shot_data(self, dictionnary_list):
+        """
+        Get the player shot data details.
+
+        Parameters:
+        - dictionnary_list (list): The player data shot infos.
+
+        Returns:
+        - dict: The dict with all necessary informations.
+        """
         if type(dictionnary_list) == "str":
             dictionnary_list = eval(dictionnary_list)
-        # Initialisation des variables
+        # Variables init
         type_shot = None
         goal_mouth_z = None
         goal_mouth_y = None
 
-        # Parcours de chaque dictionnaire dans la liste
+        # Iterate each dict in the list
         for item in dictionnary_list:
-            # Récupération du type d'événement
+            # Get the type event
             if 'type' in item.keys() and 'displayName' in item['type'].keys():
                 event_type = item['type']['displayName']
                 if event_type in ['RightFoot', 'LeftFoot', 'Head']:
                     type_shot = event_type
             
-            # Récupération de la valeur de GoalMouthZ
+            # Get the GoalMouthZ value
             if 'type' in item.keys() and 'displayName' in item['type'].keys():
                 if item['type']['displayName'] == 'GoalMouthZ' and 'value' in item:
                     goal_mouth_z = float(item['value'])
             
-            # Récupération de la valeur de GoalMouthY
+            # Get the GoalMouthY value
             if 'type' in item.keys() and 'displayName' in item['type'].keys():
                 if item['type']['displayName'] == 'GoalMouthY' and 'value' in item:
                     goal_mouth_y = float(item['value'])
@@ -352,8 +380,13 @@ class PlayerVisualization():
         return {"type": type_shot, "goal_mouth_z": goal_mouth_z, "goal_mouth_y": goal_mouth_y}
     
     def plot_shotmap_player(self):
-        
-        df = self.prepare_data_game(self.events_df, self.player, self.mins)
+        """
+        Plot the player shot map.
+
+        Returns:
+        - matplotlib.Fig: The matplotlib figure with all the shots.
+        """
+        df = self.preprocessing(self.events_df, self.player, self.mins)
         df["shot_data"] = df["qualifiers"].apply(self.get_shot_data)
         plt.style.use('fivethirtyeight')
         used_labels = []
@@ -409,8 +442,13 @@ class PlayerVisualization():
         return fig
     
     def plot_game_player_defensive(self):
+        """
+        Plot the player defensive map.
 
-        df = self.prepare_data_game(self.events_df, self.player, self.mins)
+        Returns:
+        - matplotlib.Fig: The matplotlib figure with all the defensives map.
+        """
+        df = self.preprocessing(self.events_df, self.player, self.mins)
         fig, ax, pitch = self.draw_pitch()
 
         df_def = df[df["type_name"].isin(["Tackle", "Interception", "BlockedPass", "Clearance", "Aerial"])]
@@ -456,7 +494,16 @@ class PlayerVisualization():
         return fig
     
     def get_path_logo(self, league, club):
+        """
+        Get the path logo for a selected team.
 
+        Parameters:
+        - league (string): The league club.
+        - club (string): The selected club.
+
+        Returns:
+        - string: The path of the png logo.
+        """
         dict_logo = {'EPL':'GB1',
                     'Serie A':'IT1',
                     'La Liga':'ES1',

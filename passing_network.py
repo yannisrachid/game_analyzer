@@ -1,16 +1,11 @@
 import pandas as pd
 import os
-import json
-import numpy as np
-from scipy.stats import binned_statistic_2d
 import matplotlib as mpl
 from matplotlib import pyplot as plt
-from matplotlib.patches import RegularPolygon, Arrow, ArrowStyle,FancyArrowPatch, Circle,FancyArrow
-from mplsoccer.pitch import Pitch, VerticalPitch
+from matplotlib.patches import ArrowStyle,FancyArrowPatch, Circle,FancyArrow
+from mplsoccer.pitch import VerticalPitch
 from matplotlib.colors import Normalize
 from matplotlib import cm
-from highlight_text import fig_text, ax_text
-from clubs import clubs_list
 import os
 from fuzzywuzzy import process
 from PIL import Image
@@ -18,6 +13,9 @@ import warnings
 warnings.filterwarnings("ignore")
 
 class PassingNetwork():
+    """
+    Display the passing network of both teams with all the necessary details (game, score, visualisations, logos...).
+    """
     def __init__(self, events_df, mins):
         self.events_df = events_df
         self.mins = mins
@@ -27,6 +25,17 @@ class PassingNetwork():
         self.head_width = 0.1
 
     def change_range(self, value, old_range, new_range):
+        """
+        Changes the value relative to all the values in the Series.
+
+        Parameters:
+        - value (int): Current value to change
+        - old_range (tuple): Current range of values (min_value, max_value) for the Series.
+        - new_range (tuple): New range of values (min_node_size, max_node_size).
+
+        Returns:
+        - int: New value in the new range.
+        """
         new_value = ((value-old_range[0]) / (old_range[1]-old_range[0])) * (new_range[1]-new_range[0]) + new_range[0]
         if new_value >= new_range[1]:
             return new_range[1]
@@ -36,6 +45,12 @@ class PassingNetwork():
             return new_value
         
     def create_res_dict(self):
+        """
+        Create a dict with all the necessary values for each team, in order to plot the passing network.
+
+        Returns:
+        - dict: The passing network data for each team
+        """
         res_dict = {}
 
         mins = self.mins
@@ -90,24 +105,11 @@ class PassingNetwork():
             mask3 = passes_df_all['outcome'] == True
             passes_df_suc = passes_df_all[mask2&mask3]
             
-
-            #DF with successed passes before num_minutes (additional filter on first 11 players)
-            # mask2 = passes_df_suc['minute'] < num_minutes
             mask2 = (passes_df_all['minute'] > mins[0]) & (passes_df_all['minute'] < mins[1])
-            # players = passes_df_suc[passes_df_suc['minute'] < num_minutes]['player_name'].unique()
             players = passes_df_suc[(passes_df_suc['minute'] > mins[0]) & (passes_df_suc['minute'] < mins[1])]['player_name'].unique()
             mask3 = passes_df_suc['player_name'].apply(lambda x: x in players) & \
                     passes_df_suc['passRecipientName'].apply(lambda x: x in players)
             passes_df_suc_short = passes_df_suc[mask2 & mask3]
-            
-            # print('team: ',teamName)
-            # print('passes: ', passes_df_all.shape[0])
-            # print('suc passes: ', passes_df_suc.shape[0])
-            # print('last minute: min(first red / substitution / end game) = ', mins[1])
-            # print('last minute: min(first red / substitution / end game) = ', mins[1])
-            
-            # print('suc passes befor last minute: ', passes_df_short.shape[0])
-            # print('\n')
             
             res_dict[teamId] = {}
             
@@ -117,7 +119,6 @@ class PassingNetwork():
             res_dict[teamId]['passes_df_suc_short'] = passes_df_suc_short
             res_dict[teamId]['minutes'] = mins[1]
             res_dict[teamId]['minutes_with_first_eleven'] = minutes_with_first_eleven
-            # res_dict[teamId]['minutes'] = num_minutes
 
             var = 'player_name'
             var2 = 'passRecipientName'
@@ -181,7 +182,12 @@ class PassingNetwork():
         return res_dict
         
     def plot_passing_network(self):
+        """
+        Plot the passing network for the both teams.
 
+        Returns:
+        - matplotlib.Fig: The passing network.
+        """
         nodes_cmap = mpl.colors.LinearSegmentedColormap.from_list("", ['#b5dcff',
                                                                '#97cbfa',
                                                                '#70b9fa',
@@ -416,6 +422,13 @@ class PassingNetwork():
         return fig
 
     def add_legend(self, fig, i):
+        """
+        Add the legend for each ax (each passing network team) in the fig.
+
+        Parameters:
+        - fig (matplotlib.Fig): the matplotlib figure
+        - i (int): the index for each ax of the figure.
+        """
         ax = self.ax[i]
 
         nodes_cmap = mpl.colors.LinearSegmentedColormap.from_list("", ['#b5dcff',
@@ -557,7 +570,16 @@ class PassingNetwork():
         plt.subplots_adjust(wspace=0.1, hspace=0, bottom=0.1)
 
     def get_path_logo(self, league, club):
+        """
+        Get the path logo for a selected team.
 
+        Parameters:
+        - league (string): The league club.
+        - club (string): The selected club.
+
+        Returns:
+        - string: The path of the png logo.
+        """
         dict_logo = {'EPL':'GB1',
                     'Serie A':'IT1',
                     'La Liga':'ES1',
