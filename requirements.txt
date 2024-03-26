@@ -7,6 +7,6 @@ numpy==1.22.4
 pandas==1.5.3
 s3fs==2024.3.1
 soccerdata==1.5.1
-statsmodels==0.13.2
+st-files-connection==0.1.0
 streamlit==1.31.1
 seaborn==0.13.2
