@@ -1,6 +1,7 @@
 # Game Analyzer
 
 Link to the App => [Streamlit App](https://game-analyzer.streamlitapp.com)
+
 Developed by Yannis Rachid => [LinkedIn profile](https://www.linkedin.com/in/yannis-rachid-230/)
 
 Game Analyzer is a streamlit web application which analyzes a selected game for the 2023/2024 season. The analysis is focused on the team performance and the player performance, providing data visualisations.
