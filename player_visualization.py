@@ -159,7 +159,7 @@ class PlayerVisualization():
         
         font = 'serif'
         fig.text(x=0.6, y=1, s=f"{self.player} | Dribble map | {self.club}", weight='bold', va="bottom", ha="center", fontsize=18, font=font)
-        fig.text(x=0.6, y=0.982, s=f"{PlayerVisualization.league} | Season 2023-2024 | {PlayerVisualization.date}", va="bottom", ha="center", fontsize=12, font=font)
+        fig.text(x=0.6, y=0.982, s=f"{PlayerVisualization.league} | Season 2024-2025 | {PlayerVisualization.date}", va="bottom", ha="center", fontsize=12, font=font)
         fig.text(x=0.37, y=-0.0, s="linkedin.com/in/yannis-rachid-230/", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
 
         fig.text(x=0.8, y=0.8, s="GLOBAL", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
@@ -269,7 +269,7 @@ class PlayerVisualization():
 
         font = 'serif'
         fig.text(x=0.6, y=1, s=f"{self.player} | Pass map | {self.club}", weight='bold', va="bottom", ha="center", fontsize=20, font=font)
-        fig.text(x=0.6, y=0.982, s=f"{PlayerVisualization.league} | Season 2023-2024 | {PlayerVisualization.date}", va="bottom", ha="center", fontsize=12, font=font)
+        fig.text(x=0.6, y=0.982, s=f"{PlayerVisualization.league} | Season 2024-2025 | {PlayerVisualization.date}", va="bottom", ha="center", fontsize=12, font=font)
         fig.text(x=0.87, y=-0.0, s="Yannis R", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
         fig.text(x=0.37, y=-0.0, s="linkedin.com/in/yannis-rachid-230/", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
 
@@ -328,7 +328,7 @@ class PlayerVisualization():
 
         font = 'serif'
         fig.text(x=0.5, y=1, s=f"{self.player} | Heat map | {self.club}", weight='bold', va="bottom", ha="center", fontsize=12, font=font)
-        fig.text(x=0.5, y=0.982, s=f"{PlayerVisualization.league} | Season 2023-2024 | {PlayerVisualization.date}", va="bottom", ha="center", fontsize=10, font=font)
+        fig.text(x=0.5, y=0.982, s=f"{PlayerVisualization.league} | Season 2024-2025 | {PlayerVisualization.date}", va="bottom", ha="center", fontsize=10, font=font)
         fig.text(x=0.7, y=-0.0, s="Yannis R", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
         fig.text(x=0.37, y=-0.0, s="linkedin.com/in/yannis-rachid-230/", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
 
@@ -432,7 +432,7 @@ class PlayerVisualization():
 
         font = "serif"
         axs['title'].text(0.5, 0.5, s=f"{self.player} | Shot map | {self.club}", weight='bold', va="bottom", ha="center", fontsize=18, font=font)
-        axs['title'].text(0.5, 0.1, s=f"{PlayerVisualization.league} | Season 2023-2024 | {PlayerVisualization.date}", va="bottom", ha="center", fontsize=12, font=font)
+        axs['title'].text(0.5, 0.1, s=f"{PlayerVisualization.league} | Season 2024-2025 | {PlayerVisualization.date}", va="bottom", ha="center", fontsize=12, font=font)
 
         # fig_logo = plt.figure()
         logo_path = self.get_path_logo(self.league, self.club)
@@ -479,7 +479,7 @@ class PlayerVisualization():
 
         font = 'serif'
         fig.text(x=0.5, y=0.905, s=f"{self.player} | Defensive map | {self.club}", weight='bold', va="bottom", ha="center", fontsize=12, font=font)
-        fig.text(x=0.5, y=0.890, s=f"{PlayerVisualization.league} | Season 2023-2024 | {PlayerVisualization.date}", va="bottom", ha="center", fontsize=10, font=font)
+        fig.text(x=0.5, y=0.890, s=f"{PlayerVisualization.league} | Season 2024-2025 | {PlayerVisualization.date}", va="bottom", ha="center", fontsize=10, font=font)
         fig.text(x=0.7, y=-0.0, s="Yannis R", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
         fig.text(x=0.37, y=-0.0, s="linkedin.com/in/yannis-rachid-230/", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
 
