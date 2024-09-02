@@ -25,7 +25,7 @@ with col4:
 
 ## Sidebar text details
 st.sidebar.markdown("<h1 style='text-align: center; color: white;'>{}</h1>".format("Game analyzer by Yannis R"), unsafe_allow_html=True)
-st.sidebar.text("Data from Opta last updated on 2024-03-22")
+st.sidebar.text("Last updated: 2024-09-02")
 
 ## User league selection
 st.sidebar.markdown("<h2 style='text-align: center; color: white;'>Team performance</h2>", unsafe_allow_html=True)
