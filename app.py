@@ -8,6 +8,8 @@ from clubs import clubs_list, clubs_ids
 from st_files_connection import FilesConnection
 from utils import find_clubs, check_card_type, calculate_expected_threat
 
+st.set_page_config(page_title='Game Analyzer')
+
 ## Display analysis logo in the sidebar
 col1, col2, col3 = st.sidebar.columns(3)
 with col1:
