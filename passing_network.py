@@ -473,7 +473,7 @@ class PassingNetwork():
         fig.text(x=0.5, y=.92, s=f"Passing network for {PassingNetwork.home_club} {PassingNetwork.score} {PassingNetwork.away_club}", weight='bold', va="bottom", ha="center", fontsize=10, font=font)
         fig.text(x=0.26, y=.875, s=PassingNetwork.home_club, weight='bold', va="bottom", ha="center", fontsize=8, font=font)
         fig.text(x=0.745, y=.875, s=PassingNetwork.away_club, weight='bold', va="bottom", ha="center", fontsize=8, font=font)
-        fig.text(x=0.5, y=0.90, s=f"{PassingNetwork.league} | Season 2023-2024 | {PassingNetwork.date}", va="bottom", ha="center", fontsize=6, font=font)
+        fig.text(x=0.5, y=0.90, s=f"{PassingNetwork.league} | Season 2024-2025 | {PassingNetwork.date}", va="bottom", ha="center", fontsize=6, font=font)
         fig.text(x=0.87, y=-0.0, s="Yannis R", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
         fig.text(x=0.14, y=.14, s="Pass count between", va="bottom", ha="center", fontsize=6, font=font)
         fig.text(x=0.38, y=.14, s="Pass value between (xT)", va="bottom", ha="center", fontsize=6, font=font)
