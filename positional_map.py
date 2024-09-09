@@ -93,7 +93,7 @@ class PositionalMap:
         fig.text(x=0.5, y=.92, s=f"Positional map for {PositionalMap.home_club} {PositionalMap.score} {PositionalMap.away_club}", weight='bold', va="bottom", ha="center", fontsize=10, font=font)
         fig.text(x=0.26, y=.875, s=PositionalMap.home_club, weight='bold', va="bottom", ha="center", fontsize=8, font=font)
         fig.text(x=0.745, y=.875, s=PositionalMap.away_club, weight='bold', va="bottom", ha="center", fontsize=8, font=font)
-        fig.text(x=0.5, y=0.90, s=f"{PositionalMap.league} | Season 2023-2024 | {PositionalMap.date}", va="bottom", ha="center", fontsize=6, font=font)
+        fig.text(x=0.5, y=0.90, s=f"{PositionalMap.league} | Season 2024-2025 | {PositionalMap.date}", va="bottom", ha="center", fontsize=6, font=font)
 
         fig.text(x=0.87, y=0.15, s="Yannis R", va="bottom", ha="center", weight='bold', fontsize=12, font=font, color='black')
         fig.text(x=0.2, y=0.15, s="linkedin.com/in/yannis-rachid-230/", va="bottom", ha="center", weight='bold', fontsize=6, font=font, color='black')
