@@ -42,7 +42,7 @@ def load_dataframe(league):
 @st.cache_data
 def load_dataframe_s3(league):
     conn = st.connection('s3', type=FilesConnection)
-    df = conn.read("footballanalytics/csv_data/{league}_events.csv".format(league=league.replace(" ", "_")), input_format="csv", ttl=600)
+    df = conn.read("footballanalytics/csv_data/{league}_2025_events.csv".format(league=league.replace(" ", "_")), input_format="csv", ttl=600)
     return df
 
 ## Load data in df and select the events from the game chose by the user
