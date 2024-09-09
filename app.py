@@ -27,7 +27,7 @@ with col4:
 
 ## Sidebar text details
 st.sidebar.markdown("<h1 style='text-align: center; color: white;'>{}</h1>".format("Game analyzer by Yannis R"), unsafe_allow_html=True)
-st.sidebar.text("Last updated: 2024-09-02")
+st.sidebar.text("Last updated: 2024-09-09")
 
 ## User league selection
 st.sidebar.markdown("<h2 style='text-align: center; color: white;'>Team performance</h2>", unsafe_allow_html=True)
@@ -42,7 +42,7 @@ def load_dataframe(league):
 @st.cache_data
 def load_dataframe_s3(league):
     conn = st.connection('s3', type=FilesConnection)
-    df = conn.read("footballanalytics/{league}_events.csv".format(league=league.replace(" ", "_")), input_format="csv", ttl=600)
+    df = conn.read("footballanalytics/csv_data/{league}_events.csv".format(league=league.replace(" ", "_")), input_format="csv", ttl=600)
     return df
 
 ## Load data in df and select the events from the game chose by the user
