@@ -9,7 +9,9 @@ clubs_list = ["Paris-Saint-Germain", "Lens", "Brest", "Nice", "Toulouse", "Le-Ha
               "St-Truiden", "Standard-Liege", "Gent", "Kortijk", "Club-Bruges", "KV-Mechelen", "FC-Volendam", "Vitesse", "PSV-Eindhoven", "FC-Utrecht", "Ajax", "Heracles", "SC-Heerenveen",
               "RKC-Waalwijk", "PEC-Zwolle", "Sparta-Rotterdam", "NEC-Nijmegen", "Excelsior", "AZ-Alkmaar", "Go-Ahead-Eagles", "Feyenoord", "Fortuna-Sittard", "Almere City", "FC-Twente",
               "Braga", "Famalicao", "Farense", "Casa-Pia-AC", "Gil-Vicente", "Portimonense", "Sporting-CP", "Vizela", "Arouca", "Estoril", "Rio-Ave", "Chaves", "Estrela-da-Amadora",
-              "Vitoria-de-Guimaraes", "Moreirense", "FC-Porto", "Boavista"]
+              "Vitoria-de-Guimaraes", "Moreirense", "FC-Porto", "Boavista", "Southampton", "Ipswich", "Bournemouth", "Leganes", "Espanyol", "Real-Valladolid", "Como", "Venezia", 
+              "Parma-Calcio-1913", "Holstein-Kiel", "St-Pauli", "Auxerre", "Angers", "Saint-Etienne", "Willem-II", "FC-Groningen", "Santa-Clara", "AVS-Futebol-SAD", "Nacional",
+              "FCV-Dender-EH", "Beerschot"]
 
 
 clubs_ids = {"Paris-Saint-Germain": 304,
@@ -158,5 +160,26 @@ clubs_ids = {"Paris-Saint-Germain": 304,
               "Vitoria-de-Guimaraes": 107, 
               "Moreirense": 108, 
               "FC-Porto": 297, 
-              "Boavista": 122}
+              "Boavista": 122,
+              "Southampton": 18,
+              "Ipswich": 165,
+              "Bournemouth": 183,
+              "Leganes": 825,
+              "Espanyol": 70,
+              "Real-Valladolid": 58,
+              "Como": 1290,
+              "Venezia": 85,
+              "Parma-Calcio-1913": 24341,
+              "Holstein-Kiel": 1206,
+              "St-Pauli": 283,
+              "Auxerre": 308, 
+              "Angers": 614,
+              "Saint-Etienne": 145,
+              "Willem-II": 115,
+              "FC-Groningen": 758,
+              "Santa-Clara": 251,
+              "AVS-Futebol-SAD": 2343,
+              "Nacional": 936,
+              "FCV-Dender-EH": 881,
+              "Beerschot": 23686}
 
