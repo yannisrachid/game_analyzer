@@ -1,7 +1,13 @@
 csv_data/
 archive/
 json_data/
+json_data_2023_2024/
 test_dataviz.ipynb
 test_new_viz.ipynb
 __pycache__/
 .streamlit/secrets.toml
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+data_prep.ipynb

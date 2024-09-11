@@ -504,14 +504,14 @@ class PlayerVisualization():
         Returns:
         - string: The path of the png logo.
         """
-        dict_logo = {'EPL':'GB1',
-                    'Serie A':'IT1',
-                    'La Liga':'ES1',
-                    'Bundesliga':'L1',
-                    'Ligue 1':'FR1',
-                    'Eredivisie': 'NL1',
-                    'Liga Nos': 'PO1',
-                    'Jupiler Pro League': 'BE1'}
+        dict_logo = {'EPL':'England - Premier League',
+                    'Serie A':'Italy - Serie A',
+                    'La Liga':'Spain - LaLiga',
+                    'Bundesliga':'Germany - Bundesliga',
+                    'Ligue 1':'France - Ligue 1',
+                    'Eredivisie': 'Netherlands - Eredivisie',
+                    'Liga Nos': 'Portugal - Liga Portugal',
+                    'Jupiler Pro League': 'Belgium - Jupiler Pro League'}
         
         club = club.replace('-', ' ')
 
