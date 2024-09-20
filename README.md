@@ -16,6 +16,7 @@ Actually, we have the data for theses leagues, on 2024-03-22:
 - Ligue 1
 - Premier League
 - Serie A
+- Champions League
 
 The scraping module is not include in the repository. The data is refreshed on a weekly basis, each Tuesday (during the Championship weeks).
 The code deployed on Streamlit is on the master branch.

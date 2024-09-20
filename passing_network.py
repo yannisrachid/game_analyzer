@@ -587,7 +587,8 @@ class PassingNetwork():
                     'Ligue 1':'France - Ligue 1',
                     'Eredivisie': 'Netherlands - Eredivisie',
                     'Liga Nos': 'Portugal - Liga Portugal',
-                    'Jupiler Pro League': 'Belgium - Jupiler Pro League'}
+                    'Jupiler Pro League': 'Belgium - Jupiler Pro League',
+                    'Champions League': 'Europa - Champions League'}
         
         club = club.replace('-', ' ')
 
@@ -600,4 +601,4 @@ class PassingNetwork():
             path_return = os.path.join(path_to_league_logo, logo_name_matched)
             return path_return
         else:
-            return "img/logo_tr.png"
+            return "img/logo_tr_139.png"

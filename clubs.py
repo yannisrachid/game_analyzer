@@ -11,7 +11,8 @@ clubs_list = ["Paris-Saint-Germain", "Lens", "Brest", "Nice", "Toulouse", "Le-Ha
               "Braga", "Famalicao", "Farense", "Casa-Pia-AC", "Gil-Vicente", "Portimonense", "Sporting-CP", "Vizela", "Arouca", "Estoril", "Rio-Ave", "Chaves", "Estrela-da-Amadora",
               "Vitoria-de-Guimaraes", "Moreirense", "FC-Porto", "Boavista", "Southampton", "Ipswich", "Bournemouth", "Leganes", "Espanyol", "Real-Valladolid", "Como", "Venezia", 
               "Parma-Calcio-1913", "Holstein-Kiel", "St-Pauli", "Auxerre", "Angers", "Saint-Etienne", "Willem-II", "FC-Groningen", "Santa-Clara", "AVS-Futebol-SAD", "Nacional",
-              "FCV-Dender-EH", "Beerschot", "NAC-Breda"]
+              "FCV-Dender-EH", "Beerschot", "NAC-Breda", "BSC-Young-Boys", "Dinamo-Zagreb", "Sparta-Prague", "Salzburg", "Shakhtar-Donetsk", "Slovan-Bratislava",
+              "FK-Crvena-Zvezda"]
 
 
 clubs_ids = {"Paris-Saint-Germain": 304,
@@ -182,5 +183,12 @@ clubs_ids = {"Paris-Saint-Germain": 304,
               "Nacional": 936,
               "FCV-Dender-EH": 881,
               "Beerschot": 23686,
-              "NAC-Breda": 783}
+              "NAC-Breda": 783,
+              "BSC-Young-Boys": 587,
+              "Dinamo-Zagreb": 684,
+              "Sparta-Prague": 354,
+              "Salzburg": 361,
+              "Shakhtar-Donetsk": 1706,
+              "Slovan-Bratislava": 698,
+              "FK-Crvena-Zvezda": 579}
 
