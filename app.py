@@ -31,7 +31,7 @@ st.sidebar.text("Last updated: 2024-09-09")
 
 ## User league selection
 st.sidebar.markdown("<h2 style='text-align: center; color: white;'>Team performance</h2>", unsafe_allow_html=True)
-league = st.sidebar.selectbox('Select a league', ["Bundesliga", "Eredivisie", "EPL", "Jupiler Pro League", "La Liga", "Liga Nos", "Ligue 1", "Serie A"])
+league = st.sidebar.selectbox('Select a league', ["Bundesliga", "Champions League", "Eredivisie", "EPL", "Jupiler Pro League", "La Liga", "Liga Nos", "Ligue 1", "Serie A"])
 
 # Unused: load csv from folder
 @st.cache_data
