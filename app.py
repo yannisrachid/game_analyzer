@@ -48,6 +48,7 @@ def load_dataframe_s3(league):
 ## Load data in df and select the events from the game chose by the user
 df = load_dataframe_s3(league)
 df = df.sort_values(by="date")
+df['game'] = df['game'].apply(lambda x: '-'.join(word.capitalize() for word in x.split('-')))
 game = st.sidebar.selectbox("Select a game", df["game"].unique())
 events_df = df[df["game"] == game].reset_index()
 
